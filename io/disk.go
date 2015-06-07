@@ -44,7 +44,6 @@ type DiskI struct {
 type Disk struct {
 	fd int
 
-	pointers NamedPointers
 	fileinfo os.FileInfo
 
 	offset  int64
@@ -65,6 +64,8 @@ func OpenDisk(file string) (disk *Disk, err error) {
 	if err != nil {
 		return
 	}
+
+	disk.queue = make(chan DiskI)
 
 	return
 }
@@ -108,23 +109,6 @@ func (disk *Disk) Close() error {
 	disk.closed = true
 	disk.workers.Wait()
 	return syscall.Close(disk.fd)
-}
-
-func (disk *Disk) SetPointers(pointers NamedPointers) {
-	disk.pointers = make(NamedPointers)
-	disk.pointers.SetPointers(pointers)
-}
-
-func (disk *Disk) ReadPointer(name string) ([]byte, int, error) {
-	return disk.pointers.ReadPointer(disk, name)
-}
-
-func (disk *Disk) ReadAllPointers() (map[string][]byte, int, error) {
-	return disk.pointers.ReadAllPointers(disk)
-}
-
-func (disk *Disk) WritePointer(name string, buffer []byte) (int, error) {
-	return disk.pointers.WritePointer(disk, name, buffer)
 }
 
 func (disk *Disk) Push(buffer []byte, offset int64, options OptIO) *DiskO {
