@@ -1,6 +1,6 @@
 package mbr
 
-type PartitionType int
+type PartitionType byte
 
 const (
 	Fat12               PartitionType = 0x01

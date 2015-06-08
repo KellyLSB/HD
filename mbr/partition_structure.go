@@ -8,8 +8,8 @@ import "git.hexxed.me/hd/io"
 var PartitionStructure = io.NamedPointers{
 	"BootableFlag": {0x00, 1},
 	"StartingCHS":  {0x01, 3},
-	"Type":         {0x05, 1},
-	"EndingCHS":    {0x06, 3},
-	"StartingLBA":  {0x09, 4},
-	"EndingLBA":    {0x0C, 4},
+	"Type":         {0x04, 1},
+	"EndingCHS":    {0x05, 3},
+	"StartingLBA":  {0x08, 4},
+	"EndingLBA":    {0x0B, 4},
 }

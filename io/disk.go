@@ -76,7 +76,7 @@ func (disk *Disk) ReadAt(buffer []byte, offset int64) (int, error) {
 }
 
 func (disk *Disk) WriteAt(buffer []byte, offset int64) (int, error) {
-	disko := disk.Push(buffer, offset, Write)
+	disko := disk.Push(buffer, offset, Synchronous)
 	return int(disko.num), disko.err
 }
 
@@ -87,7 +87,7 @@ func (disk *Disk) Read(buffer []byte) (int, error) {
 }
 
 func (disk *Disk) Write(buffer []byte) (int, error) {
-	disko := disk.Push(buffer, disk.offset, Write)
+	disko := disk.Push(buffer, disk.offset, Synchronous)
 	disk.offset = disko.offset // Update offset
 	return int(disko.num), disko.err
 }
