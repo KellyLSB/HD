@@ -85,7 +85,6 @@ func (nr *NamedRange) ReadAt(buffer []byte, offset int64) (n int, err error) {
 // the ReadWriterAt; using the provided offset.
 func (nr *NamedRange) WriteAt(buffer []byte, offset int64) (n int, err error) {
 	nr.checkRange(len(buffer))
-
 	return nr.ReadWriterAt.WriteAt(buffer, nr.start+offset)
 }
 

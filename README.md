@@ -9,18 +9,6 @@ A library for manipulating block devices, partition tables and partitions; coded
     Numbytes read: 512
     Buffer:
     (map[string][]uint8) (len=8) {
-     (string) (len=13) "DiskSignature": ([]uint8) (len=4 cap=4) {
-      00000000  44 19 cd e3                                       |D...|
-     },
-     (string) (len=5) "Nulls": ([]uint8) (len=2 cap=2) {
-      00000000  00 00                                             |..|
-     },
-     (string) (len=12) "PartitionOne": ([]uint8) (len=16 cap=16) {
-      00000000  80 00 01 20 0b 00 01 00  00 08 00 00 01 f8 7f 03  |... ............|
-     },
-     (string) (len=12) "PartitionTwo": ([]uint8) (len=16 cap=16) {
-      00000000  00 00 01 20 83 03 10 8f  00 08 80 03 00 1c 19 00  |... ............|
-     },
      (string) (len=14) "PartitionThree": ([]uint8) (len=16 cap=16) {
       00000000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
      },
@@ -59,6 +47,18 @@ A library for manipulating block devices, partition tables and partitions; coded
       00000190  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
       000001a0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
       000001b0  00 00 00 00 00 00 00 00                           |........|
+     },
+     (string) (len=13) "DiskSignature": ([]uint8) (len=4 cap=4) {
+      00000000  44 19 cd e3                                       |D...|
+     },
+     (string) (len=5) "Nulls": ([]uint8) (len=2 cap=2) {
+      00000000  00 00                                             |..|
+     },
+     (string) (len=12) "PartitionOne": ([]uint8) (len=16 cap=16) {
+      00000000  80 fe bf d3 83 00 01 00  00 08 00 00 01 f8 7f 03  |................|
+     },
+     (string) (len=12) "PartitionTwo": ([]uint8) (len=16 cap=16) {
+      00000000  00 00 01 20 83 03 10 8f  00 08 80 03 00 1c 19 00  |... ............|
      }
     }
 
@@ -70,10 +70,10 @@ A library for manipulating block devices, partition tables and partitions; coded
       00000000  80                                                |.|
      },
      (string) (len=11) "StartingCHS": ([]uint8) (len=3 cap=3) {
-      00000000  00 01 20                                          |.. |
+      00000000  fe bf d3                                          |...|
      },
      (string) (len=4) "Type": ([]uint8) (len=1 cap=1) {
-      00000000  0b                                                |.|
+      00000000  83                                                |.|
      },
      (string) (len=9) "EndingCHS": ([]uint8) (len=3 cap=3) {
       00000000  00 01 00                                          |...|
@@ -85,39 +85,3 @@ A library for manipulating block devices, partition tables and partitions; coded
       00000000  00 01 f8 7f                                       |....|
      }
     }
-
-
-    11
-    GetHSC:
-    [0 0 2 32]
-    SetHSC:
-    [63 255 2]
-
-    Numbytes read: 16
-    Buffer:
-    (map[string][]uint8) (len=6) {
-     (string) (len=11) "StartingLBA": ([]uint8) (len=4 cap=4) {
-      00000000  00 08 00 00                                       |....|
-     },
-     (string) (len=9) "EndingLBA": ([]uint8) (len=4 cap=4) {
-      00000000  00 01 f8 7f                                       |....|
-     },
-     (string) (len=12) "BootableFlag": ([]uint8) (len=1 cap=1) {
-      00000000  80                                                |.|
-     },
-     (string) (len=11) "StartingCHS": ([]uint8) (len=3 cap=3) {
-      00000000  00 01 20                                          |.. |
-     },
-     (string) (len=4) "Type": ([]uint8) (len=1 cap=1) {
-      00000000  0b                                                |.|
-     },
-     (string) (len=9) "EndingCHS": ([]uint8) (len=3 cap=3) {
-      00000000  00 01 00                                          |...|
-     }
-    }
-
-
-# Changelog
-
-2015-06-01 - Initial Concept, MBR basic structure and named pointers - Kelly B.
-2015-06-02 - Added queue, synchronicity and workers to Disk - Kelly B.

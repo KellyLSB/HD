@@ -101,31 +101,11 @@ func (part *Partition) SetEndingHSC(head, sector byte, cylinder []byte) {
 
 func (part *Partition) getHSC(se string) (head, sector byte, cylinder []byte) {
 	buffer, _, _ := part.NamedRange.ReadPointer(se + "CHS")
-
-	fmt.Println("GetHSC:")
-
-	fmt.Printf("%v\n", []byte{
-		buffer[0],
-		buffer[1] >> 6 << 6,
-		buffer[1] ^ 0x03,
-		buffer[2],
-	})
-
-	return buffer[0], buffer[1] >> 6 << 6, []byte{buffer[1] ^ 0x03, buffer[2]}
+	return buffer[0], (buffer[1] | 0xC0) ^ 0xC0, []byte{buffer[1] >> 6, buffer[2]}
 }
 
 func (part *Partition) setHSC(se string, head, sector byte, cylinder []byte) {
-	fmt.Println("SetHSC:")
-
-	fmt.Printf("%v\n", []byte{
-		head,
-		sector | cylinder[0],
-		cylinder[1],
-	})
-
 	part.NamedRange.WritePointer(se+"CHS", []byte{
-		head,
-		sector | cylinder[0],
-		cylinder[1],
+		head, sector | (cylinder[0] << 6), cylinder[1],
 	})
 }

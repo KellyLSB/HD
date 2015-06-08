@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"git.hexxed.me/hd/io"
@@ -22,12 +21,10 @@ func main() {
 	part := mbr.GetPartition(1)
 	part.ParsePartition()
 
-	fmt.Printf("\n%+v\n", part.GetType())
-	part.GetStartingHSC()
-
-	//part.SetStartingHSC(h, s, c)
-	part.SetStartingHSC(0x3f, 0xFE, []byte{0xd3, 0x02})
-	part.ParsePartition()
+	part.SetType(0x83)
+	h, s, c := part.GetStartingHSC()
+	part.SetStartingHSC(h, s, c)
+	//part.ParsePartition()
 
 	// part = mbr.GetPartition(2)
 	// part.ParsePartition()

@@ -76,7 +76,7 @@ func (disk *Disk) ReadAt(buffer []byte, offset int64) (int, error) {
 }
 
 func (disk *Disk) WriteAt(buffer []byte, offset int64) (int, error) {
-	disko := disk.Push(buffer, offset, Synchronous)
+	disko := disk.Push(buffer, offset, Write|Synchronous)
 	return int(disko.num), disko.err
 }
 
@@ -87,7 +87,7 @@ func (disk *Disk) Read(buffer []byte) (int, error) {
 }
 
 func (disk *Disk) Write(buffer []byte) (int, error) {
-	disko := disk.Push(buffer, disk.offset, Synchronous)
+	disko := disk.Push(buffer, disk.offset, Write|Synchronous)
 	disk.offset = disko.offset // Update offset
 	return int(disko.num), disko.err
 }
@@ -128,7 +128,7 @@ func (disk *Disk) Push(buffer []byte, offset int64, options OptIO) *DiskO {
 	// @TODO check if this was the
 	// right way to do the bitwise check
 	// I always get it confused......
-	if options&^Synchronous < 1 {
+	if options&Synchronous == Synchronous {
 		disko := <-replyto
 		return &disko
 	}
@@ -149,13 +149,13 @@ func (disk *Disk) Worker() {
 		var num int
 
 		for job := range disk.queue {
-			if job.options&^Write < 1 {
+			if job.options&Write == Write {
 				num, err = syscall.Pwrite(disk.fd, job.buffer, job.offset)
 			} else {
 				num, err = syscall.Pread(disk.fd, job.buffer, job.offset)
 			}
 
-			if job.options&^Synchronous < 1 {
+			if job.options&Synchronous == Synchronous {
 				job.replyto <- DiskO{
 					job.buffer,
 					job.offset + int64(num),
